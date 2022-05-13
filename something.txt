@@ -1,0 +1,13 @@
+Cpanel Username: ph_31703436
+Cpanel Password: meet1234
+Your URL: http://kooljool.prohosts.org or http://www.kooljool.prohosts.org
+FTP Server : ftpupload.net
+FTP Login : ph_31703436
+FTP Password : meet1234
+MySQL Database Name: MUST CREATE IN CPANEL
+MySQL Username : ph_31703436
+MySQL Password : meet1234
+MySQL Server: SEE THE CPANEL
+
+
+Cpanel URL: http://cpanel.prohosts.org/
