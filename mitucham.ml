@@ -23,22 +23,11 @@ https://ideone.com/6XHgYu
 
 
 
+Create a new site in the system
 
+Creat a folder of the specific nor qnd just make a life on /etc/apache/site available 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-	
+<VirtualHost *:81>
+    DocumentRoot /var/www/html/.files/sites/1
+    ServerName 1.site
+</VirtualHost>
