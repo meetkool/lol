@@ -1,2 +1,2 @@
-# lol
-[button url="/lol.html"]
+# <a href="./product/download.html" target="_top">Download Page</a>
+
