@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8">
+		<title>State of the Divide - Archive - MayVaneDay Studios</title>
+		<link href="../../../style.css" rel="stylesheet" type="text/css" media="all">
+		<meta name="author" content="Vane Vander">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	</head>
+	<body class="mayvaneday">
+		<article>
+			<div class="box">
+				<h1>State of the Divide</h1>
+				<p>published: 2022-05-09</p>
+			</div>
+			<hr>
+			<div class="box">
+				<p>It's not really a "union" if everything is decentralized, is it?</p>
+				<p>By the time you read this, I will have graduated from college. (Or might be doing so the following day. Isn't disinformation fun?) Funny how I'm writing this a little over a week before the fact, everyone around me swamped in finals as I sit behind the desk I work at with nothing to do. All my classwork- well, all that I'm ever going to do, enough to pass and then some- has already been turned in, and neither of my classes have finals. So I just sit there and watch everyone around me stress, spectator to a sport I once participated in, alien and disconnected from a world to which I once belonged.</p>
+				<p>The same alienated feeling I get when I look at one of the few ZeroNet proxies remaining. Development is dead except for a handful of forks, most abandoned, by people I actively distrust to keep my data safe. Every few weeks, someone, without the thought of "maybe I should contact Vane first to ask what's going on", sounds alarm bells crying about supposed Android malware on my site when they would, if they had bothered to do basic research, know that:</p>
+				<ol>
+				<li>it's <em>ancient</em> and has long since been patched out;</li>
+				<li>there's no risk of infection, since the only <a href="../../../checktor.js">JavaScript on my site</a> is to block Tor2Web (seriously, look in <a href="../../../identity/index.html">any of the damn Git repos</a>);</li>
+				<li>and it's for a <a href="../../../tutorials/nook.html">rooting tutorial for an e-book reader</a> that's long since been discontinued.</li>
+				</ol>
+				<p>Whenever I post anything on ZeroTalk or my friend's <a href="http://127.0.0.1:43110/13gLfTixjjktySEGHBMnmrQu4qMJpoRuXw">social zite</a>, it's as if I've vanished to all there (except for the aforementioned friend). There is no notification that someone has muted you. Unlike the moderators of sites known for "shadowbanning", there is not even a hope of recourse or an explanation why. So, for my birthday, I decided to leave. Blanked out all my zites and backed up my <code>users.json</code> and deleted all else. <strong>There is no use in me staying and wasting my energy in places where I am so clearly unwanted.</strong></p>
+				<p>Seeking to double down on the other darknets that <a href="https://letsdecentralize.org">Let's Decentralize</a> covers, I decided to see exactly how big the known Tor network was. Given that there were <a href="https://archive.ph/https://matt.traudt.xyz/posts/2019-01-24-stop-visiting-random-onions/">1,208,925,819,614,629,174,706,176 possible v2 onion services</a> (I could not find a number for v3), assuming about five seconds to check the uptime of each one adjusting for timeouts and slow servers, it would have taken me... let's see...</p>
+				<pre>
+lethe@sablade ~> python3
+Python 3.10.4 (main, Mar 23 2022, 23:05:40) [GCC 11.2.0] on linux
+Type "help", "copyright", "credits" or "license" for more information
+>>> (((((1208925819614629174706176 * 5) / 60) / 60) / 24) / 365) / 1000
+191673931318909.97
+				</pre>
+				<p>... 191,673,931,318,910 millennia to plow through the whole list, which is <em>far</em> longer than I expect to be alive, May promise or not. (Although nowadays it looks more like a November/December departure due to the events of the past two months.) Instead I grabbed the <a href="http://juhanurmihxlp77nkq76byazcldy2hlmovfu2epvl5ankdibsot4csyd.onion/address/">known services list</a> from <a href="https://ahmia.fi">Ahmia</a>, a well-known Tor search engine. This provides two benefits:</p>
+				<ol>
+					<li>Ahmia filters out (or makes an attempt to, anyway... I still saw a lot of sites that slipped past, and reported what I could) child sexual abuse material and hidden services that provide easy access to it,</li>
+					<li>and the resulting list only contains sites that were at one point up, saving me the step of acquiring a useful dataset.</li>
+				</ol>
+				<p>If there had been a similar dataset readily available for I2P, I would have gladly run my experiments there as well, but the closest I can find is <a href="http://identiguy.i2p">eepstatus</a> which <del>seemingly went inactive on <a href="https://archive.ph/MpCXd">Dead End Day</a><!-- https://nitter.pussthecat.org/Homriette/status/1195488287722528769 --> (November 14) last year</del> although having apparently resurrected itself after I started writing this post is a tad too hard for me to write a parser for at the moment.</p>
+				<p>Through trial and error, I was able to write a script that takes a string as the first argument and runs through the data to iterate through all hidden services with the string as the prefix and extract the title of the homepage:</p>
+				<pre>
+#!/bin/bash
+# You only really need to do the below line once.
+#torsocks curl http://juhanurmihxlp77nkq76byazcldy2hlmovfu2epvl5ankdibsot4csyd.onion/onions/ > /tmp/ahmia.txt
+LINES=$(cat /tmp/ahmia.txt | grep http://$1)
+for LINE in $LINES
+do
+	echo "$LINE" | sed -r 's/.{5}$//'
+	echo "$LINE" | sed -r 's/.{5}$//' | xargs torsocks curl -s | pup 'title' | grep -Ev "<title>|</title>"
+done
+				</pre>
+				<p>Sites that were down did not provide an HTML <code>&lt;title&gt;</code> tag for obvious reasons and so <code>pup</code> threw an EOF error for those. I split the data into manageable chunks by running the script once for every digit and letter as individual prefixes and saving them as separate files for each one.</p>
+				<p>And so the hard part began. Going through every text file and counting how many sites were both non-pornographic and non-commercial and also weren't just nginx error pages or blank placeholders. In other words, sites that I would consider adding to my <a href="https://letsdecentralize.org/rollcall/tor.html">Tor link list</a>. This included, unlike the aforementioned link list, sites in languages other than English as I did not want to skew the data on how many spoons I had to decipher Spanish or Esperanto or open a tab to Google Translate. I already had low expectations when I began, considering that crawling through server logs showed people were apparently finding Dead End Shrine Online through the following search terms:</p>
+				<ul>
+					<li>dead people pic</li>
+					<li>black wishes</li>
+					<li>sex dead</li>
+					<li>fur suit</li>
+					<li>sites like natural spanking</li>
+					<li>fucking dead woman</li>
+					<li>i like killing</li>
+					<li>one night stand stories</li>
+				</ul>
+				<p>The results of my research were... disheartening, to say the least.</p>
+				<p>In the table below for each prefix are the number of non-commercial non-pornographic sites that meet the above stated criteria, the number of known sites with said prefix known to Ahmia at the time of retrieving the service list (mid-April; I did not keep an exact date), and the percentage of non-commercial non-pornographic sites rounded to the nearest hundredth. If a prefix is missing, that means there was no available data for it.</p>
+				<p><table>
+					<thead>
+						<tr>
+							<th>Prefix</th>
+							<th>NCNP sites</th>
+							<th>Total sites</th>
+							<th>Percent NCNP</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr>
+							<td>1</td>
+							<td>1</td>
+							<td>1</td>
+							<td>100%</td>
+						</tr>
+						<tr>
+							<td>2</td>
+							<td>34</td>
+							<td>794</td>
+							<td>4.28%</td>
+						</tr>
+						<tr>
+							<td>3</td>
+							<td>36</td>
+							<td>672</td>
+							<td>5.36%</td>
+						</tr>
+						<tr>
+							<td>4</td>
+							<td>31</td>
+							<td>680</td>
+							<td>4.56%</td>
+						</tr>
+						<tr>
+							<td>5</td>
+							<td>34</td>
+							<td>704</td>
+							<td>4.83%</td>
+						</tr>
+						<tr>
+							<td>6</td>
+							<td>29</td>
+							<td>677</td>
+							<td>4.28%</td>
+						</tr>
+						<tr>
+							<td>7</td>
+							<td>34</td>
+							<td>690</td>
+							<td>4.93%</td>
+						</tr>
+						<tr>
+							<td>A</td>
+							<td>45</td>
+							<td>735</td>
+							<td>6.12%</td>
+						</tr>
+						<tr>
+							<td>B</td>
+							<td>45</td>
+							<td>859</td>
+							<td>5.24%</td>
+						</tr>
+						<tr>
+							<td>C</td>
+							<td>46</td>
+							<td>775</td>
+							<td>5.94%</td>
+						</tr>
+						<tr>
+							<td>D</td>
+							<td>68</td>
+							<td>801</td>
+							<td>8.49%</td>
+						</tr>
+						<tr>
+							<td>E</td>
+							<td>48</td>
+							<td>733</td>
+							<td>6.55%</td>
+						</tr>
+						<tr>
+							<td>F</td>
+							<td>45</td>
+							<td>692</td>
+							<td>6.50%</td>
+						</tr>
+						<tr>
+							<td>G</td>
+							<td>45</td>
+							<td>711</td>
+							<td>6.33%</td>
+						</tr>
+						<tr>
+							<td>H</td>
+							<td>45</td>
+							<td>754</td>
+							<td>5.97%</td>
+						</tr>
+						<tr>
+							<td>I</td>
+							<td>139</td>
+							<td>819</td>
+							<td>16.97%</td>
+						</tr>
+						<tr>
+							<td>J</td>
+							<td>31</td>
+							<td>705</td>
+							<td>4.40%</td>
+						</tr>
+						<tr>
+							<td>K</td>
+							<td>30</td>
+							<td>669</td>
+							<td>4.48%</td>
+						</tr>
+						<tr>
+							<td>L</td>
+							<td>39</td>
+							<td>683</td>
+							<td>5.71%</td>
+						</tr>
+						<tr>
+							<td>M</td>
+							<td>50</td>
+							<td>762</td>
+							<td>6.56%</td>
+						</tr>
+						<tr>
+							<td>N</td>
+							<td>29</td>
+							<td>681</td>
+							<td>4.26%</td>
+						</tr>
+						<tr>
+							<td>O</td>
+							<td>53</td>
+							<td>651</td>
+							<td>8.14%</td>
+						</tr>
+						<tr>
+							<td>P</td>
+							<td>55</td>
+							<td>726</td>
+							<td>7.58%</td>
+						</tr>
+						<tr>
+							<td>Q</td>
+							<td>37</td>
+							<td>669</td>
+							<td>5.53%</td>
+						</tr>
+						<tr>
+							<td>R</td>
+							<td>37</td>
+							<td>699</td>
+							<td>5.29%</td>
+						</tr>
+						<tr>
+							<td>S</td>
+							<td>49</td>
+							<td>750</td>
+							<td>6.53%</td>
+						</tr>
+						<tr>
+							<td>T</td>
+							<td>72</td>
+							<td>770</td>
+							<td>9.35%</td>
+						</tr>
+						<tr>
+							<td>U</td>
+							<td>38</td>
+							<td>672</td>
+							<td>5.65%</td>
+						</tr>
+						<tr>
+							<td>V</td>
+							<td>35</td>
+							<td>683</td>
+							<td>5.12%</td>
+						</tr>
+						<tr>
+							<td>W</td>
+							<td>55</td>
+							<td>690</td>
+							<td>7.97%</td>
+						</tr>
+						<tr>
+							<td>X</td>
+							<td>34</td>
+							<td>692</td>
+							<td>4.91%</td>
+						</tr>
+						<tr>
+							<td>Y</td>
+							<td>43</td>
+							<td>662</td>
+							<td>6.50%</td>
+						</tr>
+						<tr>
+							<td>Z</td>
+							<td>54</td>
+							<td>768</td>
+							<td>7.03%</td>
+						</tr>
+					</tbody>
+				</table></p>
+				<p>The dark web is rather large, after all. Unfortunately, according to the data I collected above, only a diminutive fraction of it- <strong>between four and ten percent</strong>- is being utilized for something other than sharing pictures of children and women being sexually abused (can you <em>really</em> be sure that she consented? Monetary compensation does not equal consent for sex, as consent must be freely given and a desperate poverty-induced need for money introduces perverse incentives) and scamming people out of their money.</p>
+				<p>I would like to consider myself more of an optimist than I was that dreadful anhedonic summer fresh out of high school. I find myself against my better judgement giving my brothers yet more chances and letting minor insults slide and keeping my complaints to myself. But I scroll through every prefix list, and I see the same site titles pop out over and over: "REAL RAPE". "Hacked and Exposed Young Girls". "Porn Hacker". "Raped Bitch". "NEFARIOUS TABOO PORN". Hell, even Pornhub themselves are officially on Tor, and they've <a href="https://archive.ph/https://arstechnica.com/tech-policy/2021/06/pornhub-hosted-rape-revenge-porn-and-child-sex-abuse-videos-lawsuit-alleges/">recently gotten slapped hard with lawsuits</a> over their lackadaisacal attitude towards keeping child sexual abuse material and revenge porn off their platform. The titles of the sites, nothing else, are all I need to know to know what goes on there. If it were just one site here and there, my heart wouldn't hurt so much. But this, plus the scam markets, is the <em>vast majority</em> of the content known to Ahmia. And this is just what's passed through their filters! Ahmia hosts <a href="http://juhanurmihxlp77nkq76byazcldy2hlmovfu2epvl5ankdibsot4csyd.onion/blacklist/">hashes of known CSAM sites</a> to help other search engines keep abusive and illegal materials out of their indexes, and the list is practically a novel in its own right, meaning that percentage of non-shit hidden services is actually <em>much, much</em> lower.</p>
+				<p>Is this what males (be honest, pornography is a male-induced problem) do when they feel there will be no consequences, no possibility of their actions coming back to haunt them? Exposure to pornography has <a href="https://archive.ph/JomfF">time and time again</a> <!-- https://op-gyn.tumblr.com/post/654714489973899264/what-can-six-hours-of-porn-exposure-do -->
+				been proven to lower one's empathy towards women and inhibitions toward sexual violence. Men are willingly desensitizing themselves and hiding behind anonymizing networks like Tor to escape the normal routes to restitution that law enforcement theoretically could, if misogyny-induced attacks were correctly considered hate crimes against a historically marginalized group (<a href="https://archive.ph/GP3Tc">which the UK apparently refuses to</a> <!-- https://www.bbc.com/news/uk-politics-58800328 -->
+				<a href="https://archive.ph/GxkOQ#selection-1743.82-1743.244">since it would... overload the system... since they happen so frequently...</a> <!-- https://www.bbc.com/news/uk-politics-56399862 -->
+				), use to take down content and bring to justice those responsible. Not that I suddenly like the cops or trust them to do anything correctly in this hellworld. But something needs to be done.</p>
+				<p>And what am I to do?</p>
+				<p>I wrestled with this question for several weeks, but first with Freenet, which <a href="https://archive.ph/https://arstechnica.com/tech-policy/2017/03/man-jailed-indefinitely-for-refusing-to-decrypt-hard-drives-loses-appeal/">has a reputation</a> for <a href="https://archive.ph/https://www.texarkanagazette.com/news/2022/apr/28/feds-charge-texarkana-man-with-child-porn/">being a haven</a> for <a href="https://archive.ph/https://www.vice.com/en/article/gvymzx/one-step-ahead-pedophiles-on-the-deep-web">pedophiles</a>. When one requests content on Freenet, said content is cached partially on every node that it passes through on route to the person who requested it. This is how popular content lives longer and is faster to access. But this also means that one has no idea what is being stored on their node at any given time and there is a non-zero chance one is helping in the dissemination of child sexual abuse material.</p>
+				<p>There is a small child in my life. <a href="../../2021/september/fire.html">She lives in the house behind me</a> and frequently comes to visit with her mother. <a href="../../2021/december/exhausted.html">We hold craft nights together.</a> She calls me her best friend. I cherish her very much. I cannot stand the thought of her, or any other child, coming to harm of any kind. The harms I supposedly wrought on strangers <a href="https://deadendshrine.online/p5.html">in a previous life</a>? I don't remember any of it, and I was being manipulated as basically a barely-sentient tool. I can live with myself. The harms I unknowingly inflicted on others in my childhood this life, only recognized decades after the fact looking back at memories of places I will never set foot in again? I can live with myself, difficult as it is in my weaker moments. But I could never and I would never live with myself knowing I, as I am now, helped a pedophile harm a small child and evade the consequences.</p>
+				<p>So it would logically follow that I would refuse to support technologies that I <em>know</em> enable others to harm children. Except... Tor and Freenet and other darknets aren't used by just pedophiles. They're used by activists and people under repressive regimes and those seeking to leave abusive households and students wanting to get around school firewalls and webmasters who don't want to pay for domains or cloud hosting or a static IP. Unfortunately I have no way of quantifying what goes on in exit nodes. (A study done by others estimates <a href="https://archive.ph/o9Z5K#selection-1149.0-1161.43">98% of Tor traffic is through exit nodes and only 2% is to hidden services</a><!-- https://theconversation.com/how-the-worlds-biggest-dark-web-platform-spreads-millions-of-items-of-child-sex-abuse-material-and-why-its-hard-to-stop-167107 -->, but I have no data about what amount of that 98% was for non-illegal purposes.) The existence of that four to ten percent of Tor hidden services not dedicated to harm... does it outweigh the ninety-plus percent of abusive sites on the network?</p>
+				<p>I mean, child molestation is far older than any darknet, or even the Internet. A theoretical shutdown of Freenet or Tor or whatever wouldn't stop the spread of CSAM, and the bot spam on imageboards proves that plenty of illicit material gets traded on the clearnet anyway, but it <em>would</em> harm those legitimate users seeking more computing freedom. Never mind that, with peer-to-peer systems, a shutdown wouldn't even work since the source code is already out there. (Tor could theoretically be shut down, though, given that the whole network is dependent on a small handful of <a href="https://archive.ph/LPAJK">hardcoded consensus nodes</a>.)</p>
+				<p>The genie is out of the bottle. The <a href="../../2020/july/signal.html">signal can't be stopped.</a> There is no "universal backdoor" that would help law enforcement catch pedophiles without weakening legitimate and liberatory uses for the technology. All anyone can hope for, I guess, is that these scumbags mess up their OPSEC and get exposed whenever they pop up. The same tactics as always.</p>
+				<p>How can I assuage my conscience?</p>
+				<p>What do I do?</p>
+				<p>Is there anything I <em>can</em> do?</p>
+				<p>I look to my Patron-Saint for ideas. Gone to college to learn how to "make clothes", already demonstrated herself a talented creator of costumes and glamours. Disguises. Personas. She would know something of the willful erasure of one's identity to survive in a hostile place. I worry about myself for her sake. How different I must seem than the person she watched die a lifetime ago, watched be <a href="../april/blood.html">reborn in a foreign culture</a> in an alien world where threatening a child with eternal damnation in a pit of fire for even the slightest infraction gone unrepented is a perfectly socially acceptable thing to do. The psychic and mental damage inflicted on me neither of us have the tools to repair. The damage I am inflicting on myself for the sake of this stupid link list.</p>
+				<p><em>Please let there be something left at the end for me to love.</em></p>
+				<p><em>Of course, Jett. Lend me your strength and something to hide my face with.</em></p>
+				<p>I stumble across list after link list plastered with ads and promotions for clear scams. Clear copy-pastes of each other with little to no checking for typos or dead links. Some with huge banners advertising child porn, not a single qualm given by any of the webmasters. <em>Truly</em> a lovely introduction to the Tor network.</p>
+				<p>A reflection of this world of suffering I would rather leave behind.</p>
+				<p><em>Wouldn't it be nice,</em> I catch myself thinking, <em>if someone made an easy-to-navigate list where everything was up and neatly organized and there wasn't any chance of accidentally stumbling upon filth? To save others from the agony of trying to find the gems in all this muck?</em></p>
+				<p>And it's got to be me, for however much longer I have to live.</p>
+				<p>Because who else is going to?</p>
+			</div>
+			<hr>
+			<div class="box">
+				<p align=right>CC BY-NC-SA 4.0 &copy; Vane Vander</p>
+			</div>
+		</article>
+	</body>
+</html>

@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8">
+		<title>The Terminal Life - MayVaneDay Studios</title>
+		<link href="./style.css" rel="stylesheet" type="text/css" media="all">
+		<meta name="author" content="Vane Vander">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	</head>
+	<body class="mayvaneday">
+		<div class="box">
+			<p><h1>The Terminal Life</h1></p>
+			<p>last updated: 2021-12-28</p>
+		</div>
+		<hr>
+		<div class="box">
+			<p>"Terminal" as in the box you can open on Linux and type funny commands in and, usually, they do the thing, not "terminal" like "a voice in my head tells me I'll probably die shortly after graduating college". There's a terminal on Windows too, but it's only useful for running <code>ping</code>. If anyone tells you to run any iteration of <code>sudo rm -rf /*</code>, <b>don't</b>.</p>
+			<ul>
+				<li><b>nmtui</b>: Wi-Fi manager for those of us who haven't been forcibly upgraded to Connman. Arrow keys navigate. Connecting to a new network is as simple as going to "Activate a connection", pressing enter on the network wanted, and then typing in the password... provided that your network is a simple WPA/WPA2 one like a residential home router, and isn't doing some fucky credentials/certificate thing like a corporate network.</li>
+				<li><b>pandoc</b>: (almost) universal document converter. I write my posts in Markdown and then use Pandoc to convert them to HTML... albeit a huge chunk of HTML with no line breaks between the paragraphs. It will insist on using non-ASCII characters in otherwise-ASCII file formats unless you beat it over the head with the command-line flags <code>--ascii --wrap=none</code>, but even then it'll just use the <a href="https://www.rapidtables.com/web/html/html-codes.html">character code</a> instead.</li>
+				<li><b><a href="https://github.com/gottox/smu">smu</a></b>: another document converter, but it only goes from a subset of Markdown to HTML. It compiles in under a second on my computer and doesn't require a kajillion Haskell dependencies like <code>pandoc</code> does.</li>
+				<li><b>elinks</b>: a browser for the terminal... not to be confused with <code>links</code> or <code>lynx</code>. I used to use <code>lynx</code> because of the Gopher support that <code>elinks</code> lacks, but I've never been able to successfully compile <code>lynx</code> with TLS support. <code>elinks</code>, on the other hand, compiles in a snap with no problems. It also has slightly better text formatting and keyboard shortcuts. (The H key pops up the browsing history, for example, and G asks you which URL you want to go to next.) My only complaint is that it won't let me select text to copy to the clipboard with my mouse without an arcane keyboard combination I've already forgotten.</li>
+				<li><b>cvlc</b>: VLC, but in the terminal! I <a href="./tutorials/vlc.html">wrote a tutorial</a> about using it a while ago. You almost certainly want to use the ncurses frontend.</li>
+				<li><b>byobu</b>: terminal multiplexer, which is a fancy way of saying "please let me run more than one program at a time in a TTY". Basically <code>tmux</code> but better, although it can use GNU <code>screen</code> as a backend too. Comes with a fancy little status bar at the bottom of the screen that displays info about your system, such as system load, disk usage, and battery status (which is a godsend when using a TTY on a laptop). The info it displays can be changed by pressing F1 or running <code>byobu-config</code>.</li>
+				<li><b>tree</b>: recursively lists all the files in a given folder... and every folder in there... and every folder in those folders... hence the <i>recursive</i>. If you've lost a file but know part of its name, you can run <code>tree -f | grep "SearchTerm"</code> to find it. (If you're searching by content, just use <code>grep -nr "SearchTerm"</code> instead.)</li>
+				<li><b>weechat</b>: IRC client, although plugins exist to allow it to handle XMPP and Matrix as well. Supposedly relay settings exist so that one can run it on a server or always-on computer and connect to the Weechat session on a phone or some other device with intermittent connectivity, but I only know this because someone keeps trying to hijack my session and I get at least one <i>cannot accept client because relay password is empty, and option relay.network.allow_empty_password is off</i> error message a day.</li>
+				<li><b>htop</b>: the Linux equivalent of the Windows Task Manager, except this is Linux so everything is automatically better than Microshaft Wangblows. (<a href="https://lainsafe.getimiskon.xyz/files/uWxdZtVf/proof%20why%20linux%20is%20better%20than%20windows.png">Migrosert Wendys?</a>) Recent versions have mouse support if you're running an X11 session instead of a TTY and are using a decent terminal. I recommend sorting by <code>MEM</code> instead of <code>CPU</code>.</li>
+			</ul>
+		</div>
+	</body>
+</html>

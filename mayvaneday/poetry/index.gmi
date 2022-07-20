@@ -1,0 +1,179 @@
+# Poetry
+
+## A
+=> a/a-birthday-every-day.txt	a birthday every day
+=> a/access.txt	A New Page
+=> a/airborne.txt	airborne
+=> a/a-royal-color.txt	a royal color
+=> a/arrhythmia.txt	Arrhythmia
+=> a/artisto.txt	artisto
+=> a/a-smearing-of-galaxies.txt	a smearing of galaxies
+=> a/dang-trees.txt	all these dang trees everywhere
+
+## B
+=> b/better-version.txt	Better Version
+=> b/birdgazing.txt	Birdgazing
+=> b/blizzard-girl.txt	blizzard girl
+
+## C
+=> c/carmine.txt	Carmine Red
+=> c/choco.txt	That Ain't Chocolate, Son
+=> c/clocktower.txt	Clocktower Blitz
+=> c/comer-beber.txt	comer, beber
+=> c/confectionery-contempt.txt	confectionery contempt
+=> c/corner-witch.txt	CORNER WITCH
+=> c/corner-witch-2.txt	CORNER WITCH II
+=> c/crescendo.txt	crescendo
+=> c/cultivator.txt	Cultivator
+
+## D
+=> d/daybreak.txt	daybreak
+=> d/deadend.txt	Breaking Down The Dead-End Sign
+=> d/driven.txt	Driven To Death
+
+## E
+=> e/earthbound.txt	earthbound
+=> e/edell.txt	Edell
+=> e/end.txt	In The End Of Everything
+
+## F
+=> f/falantaj-folioj.txt	falantaj folioj
+=> f/fantomurbo.txt	fantomurbo
+=> f/fatali.txt	fatali
+=> f/father-no-longer.txt	Father No Longer
+=> f/female-urge.txt	The Female Urge To...
+=> f/feverdream2009.txt	Fever Dream 2009
+=> f/firebrand.txt	firebrand
+=> f/flickering.txt	Flickering Out
+=> f/forgesitaj-memoroj.txt	forgesitaj memoroj
+=> f/forgive-me-marcel.txt	forgive me, Marcel
+
+## G
+=> g/gemini.txt	Gemini
+=> g/garden-gym.txt	a garden in the corner of a gym
+=> g/the-golden-cage.txt	The Golden Cage
+=> g/gradation.txt	Gradation
+=> g/green.txt	green
+=> g/grey.txt	The Grey
+
+## H
+=> h/haru.txt	Haru
+=> h/hoarding.txt	Hoarding
+=> h/hotdog.txt	hotdog
+=> h/home.txt	You Can't Go Home Again
+
+## I
+=> i/irantaj.txt	irantaj, irantaj, irinta
+
+## J
+=> j/junaj.txt	junaj plenkreskuloj
+=> j/jugo-vs-juego.txt	jugo vs juego
+
+## K
+=> k/kafejo.txt	kafejo
+=> k/kie-2.txt	kie ajn vi estas, parto du
+=> k/kublaclam.txt	Kubla Clam
+=> k/killing-calvin.txt	Killing Calvin
+=> k/konton-no-tsukai.txt	Konton no Tsukai
+
+## L
+=> l/la-somero-de-amo.txt	la somero de amo
+=> l/lumo-en-vivo.txt	lumo en vivo
+=> l/luna.txt	Luna
+=> l/luna2.txt	Luna II
+=> l/lovesmenot.txt	loves me not
+
+## M
+=> m/melia.txt	Melia
+=> m/messymessy.txt	messymessy
+=> m/mitad1.txt	Mitad-marida I
+=> m/montana1.txt	Montana I
+=> m/montana2.txt	Montana II
+=> m/montana3.txt	Montana III
+=> m/montana4.txt	Montana IV
+=> m/morgana.txt	Morgana
+=> m/morgueatorium.txt	Morgueatorium
+
+## N
+=> n/namesake.txt	Namesake
+=> n/neniam-mian.txt	neniam mian
+=> n/nil.txt	Nil
+=> n/nomadic.txt	nomadic
+=> n/none-nuns.txt	None Nuns
+=> n/nosteponsnek.txt	no step on snek
+=> n/novatore.txt	novatore sang in the sun
+=> n/state.txt	No Sustained State Has Ever Existed (All Empires Fall Eventually)
+=> n/not-found.txt	not found
+
+## O
+=> o/october-7-2018.txt	october 7, 2018
+=> o/old-bunk-house.txt	an old bunk house built for two
+=> o/oracle.txt	ORACLE
+=> o/one-less-box.txt	One Less Box
+
+## P
+=> p/perdition-eden.txt	Perdition from the Garden of Eden
+=> p/prayer-dark.txt	prayer to dark
+=> p/prayer-light.txt	prayer to light
+=> p/prepari.txt	prepari
+=> p/pressed.txt	pressed flower petals
+=> p/psa.txt	Public Disservice Announcement
+=> p/passer.txt	Passer
+
+## R
+=> r/reakirante.txt	reakirante
+=> r/reciprocada.txt	Reciprocada
+=> r/regnant.txt	regnant
+=> r/reynar.txt	Reynar
+=> r/rondiro.txt	rondiro de lukso
+=> r/rugxa.txt	rugxa kresto
+=> r/ridge.txt	The Ridge
+
+## S
+=> s/sakura.txt	Saint Sakura
+=> s/sanktulo.txt	sanktulo de nuboj
+=> s/school4.txt	school-mandated poetry: day 4 / acrostic
+=> s/school5.txt	school-mandated poetry: day 5 / abecedarian
+=> s/school6.txt	school-mandated poetry: day 6 / terza rima
+=> s/school7.txt	school-mandated poetry: day 7 / triplet
+=> s/school8.txt	school-mandated poetry: day 8 / ballad
+=> s/sedation.txt	Sedation In Alliteration
+=> s/seris.txt	Seris
+=> s/serpenton.txt	serpenton
+=> s/skin.txt	skin
+=> s/sleepover2011.txt	Sleepover 2011
+=> s/somnolence.txt	Somnolence
+=> s/stealing-time.txt	Stealing Time
+=> s/sweet-summer.txt	Sweet Summer
+=> s/strange-proposal.txt	A Strange Proposal
+=> s/strawberry.txt	Strawberry Pound Cake
+
+## T
+=> t/the-rebirth-of-memory.txt	the rebirth of memory
+=> t/the-tomb.txt	the tomb
+=> t/the-urban-witch.txt	the urban witch
+=> t/tissue.txt	Tissue Sample
+=> t/todo-los-dias.txt	todo los dias
+=> t/to-luce.txt	To Luce
+=> t/to-velouria.txt	To Velouria
+=> t/treatise.txt	A Treatise between Koriel and Solstice
+=> t/twenty-one.txt	Twenty-One
+=> t/two-two.txt	Two Two
+
+## U
+=> u/under-my-fingernails.txt	Under My Fingernails
+=> u/uncharming.txt	uncharming veneer
+
+## V
+=> v/viaje.txt	viaje
+=> v/victor.txt	victor
+
+## W
+=> w/warning.txt	warning
+=> w/watershed.txt	watershed
+=> w/wip.txt	WIP
+=> w/withering.txt	withering
+=> w/wme.txt	(w/m)e
+
+## Y
+=> y/YOU-NEED-TO-KNOW.txt	YOU NEED TO KNOW

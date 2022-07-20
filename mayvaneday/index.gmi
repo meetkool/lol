@@ -1,0 +1,27 @@
+# Welcome to MayVaneDay Studios!
+
+```
+before, in your grief, you declare
+"my time on this earth is done; I have no more need for air"
+just remember how you swore to with your own hands the heavens tear
+```
+=> poetry/e/earthbound.txt	- "earthbound"
+
+=> books/	Books
+=> poetry/	Poetry
+=> flashfiction/	Flash Fiction
+=> tutorials/	Tutorials
+
+=> https://letsdecentralize.org	Let's Decentralize (the new home of the Hidden Rollcall)
+=> public.gpg	My GPG key
+=> identity.txt	Identity & Contact
+
+Also available on:
+
+=> gemini://mayvaneday.art	Gemini (Clearnet)
+=> gemini://meynethaffeecapsvfphrcnfrx44w2nskgls2juwitibvqctk2plvhqd.onion	Gemini (Tor)
+=> gopher://meynethaffeecapsvfphrcnfrx44w2nskgls2juwitibvqctk2plvhqd.onion	Gopher (Tor)
+=> http://meynethaffeecapsvfphrcnfrx44w2nskgls2juwitibvqctk2plvhqd.onion	HTTP (Tor)
+=> http://zli2qsg54w7y42vgw4xxlnj4nktcpg7xp33yjxkp33sjafvznbwa.b32.i2p	I2P
+=> http://127.0.0.1:8888/USK@Up0ipQCQjyY2PaGofU-P63kJMb54E0~2xZiUnyxPypM,rGmJhPDVou6DwS6Eh23sZ93hVbDaA6v4D5l3vWsN-oY,AQACAAE/mayvaneday/-1/	Freenet
+=> http://127.0.0.1:8080/ipns/mayvaneday.org/	IPFS

@@ -1,0 +1,364 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+	<title>MayVaneDay: Latest Updates</title>
+	<link href="http://yggdrasil.mayvaneday.org/feed.xml" rel="self" />
+	<link href="http://yggdrasil.mayvaneday.org" />
+	<id>http://yggdrasil.mayvaneday.org/feed.xml</id>
+	<author>
+		<name>Vane Vander</name>
+		<email>vanevander@mayvaneday.org</email>
+	</author>
+
+	<entry>
+		<title>The state of darknet access on Android</title>
+		<link href="http://yggdrasil.mayvaneday.org/blog/2022/july/android_darknet.html" />
+		<id>http://yggdrasil.mayvaneday.org/blog/2022/july/android_darknet.html</id>
+		<published>2022-07-11</published>
+		<summary type="html"><![CDATA[<article>
+				<div class="box">
+					<p>Although I've been publishing things on the internet since I was about eleven, it took me until I was seventeen to get reliable access to a computer of my own and nineteen to set up my first Tor hidden service, back when v2 addresses were a thing and one had a hope of memorizing the URL to share to others. Meaning, up until then, I was sharecropping on someone else's server: Blogger at first, then WordPress once I realized how evil Google was, then Neocities until I was harrassed off one day.</p>
+					<p>If I knew back then what I do now, then obviously I would have never put anything on the clearnet to begin with. What creative ideas did I let wither inside me because I had to constantly toe the line of being grounded and electronics confiscated for something innocuous? (So my brothers can openly joke about porn and violence against women and my parents refuse to do anything, but I wrote <em>one</em> poem about my ex-girlfriend that I had when I was fourteen- and while it wasn't very good by my current standards, I certainly wasn't wishing violence against the teenager- and they took all my devices and isolated me from my friends for a week...?) I can only guess how much better at writing I would be today if I hadn't had to constantly bite my tongue.</p>
+					<p>But Tor hidden services require a server, being that Tor is a client-server model. And while I cannot remember whether or not Orbot had hosting support back in 2014 when I was using it to get past my middle school firewall, I can attest that not only does Orbot have hosting support nowadays, but there are also <em>many more</em> options for publishing content on the "dark web" with nothing more than a phone and a little technical expertise.</p>
+					<p>For this post, I attempted to do as much as possible with that same device I spent so many hours typing into the WordPress editor on: a Motorola Moto X, Verizon edition, Android codename "ghost". It has not seen system updates in about five years, forever stuck on Android 5.1, and I have neither the bandwidth nor the patience to <a href="https://web.archive.org/web/20220708192015/https://wiki.lineageos.org/devices/ghost/build">attempt to compile an abandoned version of LineageOS</a> just so I can have Android 6.0 instead. For apps that require a more recent version of Android or otherwise crashed on the Moto X, I instead used the phone I had after it, a Samsung Galaxy Note 3 with the latest nightly of LineageOS (meaning some minor point version of Android 11 at the time of writing). For client-server darknets, I used <a href="https://f-droid.org/en/packages/com.example.flutter_http_server/">ServeIt</a>, available on F-Droid, as the backend server; it only supports static hosting from a directory of files, meaning no dynamic applications, but that would have been all I needed back then.</p>
+				</div>
+				<hr>
+					<div class="box">
+						<h2>Tor</h2>
+						<p>Once upon a time, there was a "Tor Browser" app named Orweb which was little more than an Android WebView wrapped in a very poorly-made UI. That eventually got abandoned and replaced with Orfox, which was slightly better and also allowed for niceties like bookmarks and tabs. (I am going off my memory from about a decade ago, so don't bother emailing me if I got something wrong.) Nowadays we are a bit more spoiled with an <a href="https://www.torproject.org/download/#android">official Tor Browser</a>. However, it seems to crash a lot, so I prefer to browser Tor hidden services on Android using <a href="https://f-droid.org/en/packages/com.stoutner.privacybrowser.standard/">Privacy Browser</a> instead.</p>
+						<p><a href="https://github.com/guardianproject/orbot/releases">Orbot</a> is best in class as far as "Tor on Android" goes, and I know of no other (non-proprietary) solution that doesn't come coupled to a browser. In Orbot, you can set up a hidden service by going to the meatball (three dots) menu, pressing "Onion Services", then "Hosted Onion Services". Ensure that "User services" is selected and then press the plus button in the lower-right corner. "Local port" should be the port ServeIt is running on, and "Onion Port" should be 80 as that is the default HTTP port. (You can make it something else, but then you would need to share that as part of the URL.) Long-pressing the service URL once created will show an option to backup the keys or copy the URL to the clipboard.</p>
+					</div>
+					<hr>
+						<div class="box">
+							<h2>I2P</h2>
+							<p>There are two I2P apps on F-Droid that I know of and have used. The primary one is slow and buggy and features a built-in browser that is even worse than Orweb was back in the day. Therefore I recommend using <a href="https://f-droid.org/en/packages/org.purplei2p.i2pd/">i2pd</a> instead. Any browser can be the "I2P browser" if set to use localhost port 4444 as HTTP proxy; the aforementioned "Privacy Browser" has a preset in the proxy menu to use I2P without messing with port numbers.</p>
+							<p>Unlike Orbot, i2pd stores all of its settings and keys in the filesystem instead of in the app settings. (This may or may not be a security risk depending on your threat model.) In your device's home directory will be a folder named "i2pd". Inside is the file <code>tunnels.conf</code>. If your file manager has the option to manually open the file as text, use that and open it in your favorite text editor; otherwise temporarily rename the file to <code>tunnels.txt</code> to edit it.</p>
+							<p>At the end of the file, add the following:</p>
+							<pre>
+[server]
+type = http
+host = 127.0.0.1
+port = 8888
+keys = http.dat
+							</pre>
+							<p>Please note that port 8888 in this example is what ServeIt was running on. If yours is on a different port, then change the number in the above config accordingly.</p>
+							<p>If you renamed the file, change it back to <code>tunnels.conf</code>. Go back to the i2pd app, press on the meatball menu and then "Reload tunnels", then "Open Web Console" and "I2P tunnels" to get the new URL of your eepsite.</p>
+						</div>
+						<hr>
+							<div class="box">
+								<h2>Yggdrasil</h2>
+								<p>There is a <a href="https://f-droid.org/en/packages/io.github.chronosx88.yggdrasil/">Yggdrasil</a> app which I have successfully used to navigate Yggdrasil sites before on my main phone, but it continuously crashed on both my Moto X and Note 3. On my main phone (a Samsung Galaxy S9) it was hard to see the full IP address... and the request to ServeIt from a different device also running Yggdrasil on the same network (so autopeering would have occurred) timed out. As Yggdrasil runs on Linux by creating a new virtual network adapter so that it can coexist with an existing network stack (instead of using proxies for access like Tor) and none of my devices are rooted, it does not make sense to attempt to compile and run it in Termux or UserLAnd.</p>
+							</div>
+							<hr>
+								<div class="box">
+									<h2>Lokinet</h2>
+									<p>There exists a <a href="https://oxen.rocks/oxen-io/lokinet/">dump of Lokinet binaries</a>, including APKs for Android, run by the developers... but I was immediately greeted with the following message:</p>
+									<blockquote>Builds from this server may work, may fail, may wipe your hard drive without asking, and are entirely unsupported.</blockquote>
+									<p>Being that Lokinet has a personal reputation of being clunky and inelegant at best and downright non-functional at usual, I did not go on with high expectations. My hopes were not bolstered by the fact that half of the Android binaries were named "anrdoid". Very classy. Truly the attention to detail I want to see in an anonymity network.</p>
+									<p>The Lokinet app white-screened and then crashed on the Moto X. It ran on the Note 3 (at least, it said it was running...?) but no pages loaded.</p>
+								</div>
+								<hr>
+									<div class="box">
+										<h2>Freenet</h2>
+										<p>There is a version of <a href="https://f-droid.org/en/packages/org.freenetproject.mobile/">Freenet mobile</a> on F-Droid that I've found works wonderfully on my current phone. As it uses the same FProxy interface as the desktop version, everything works the same, from adding bookmarks to managing peered friends to browsing sites. Although the app ran on the Moto X, it hung at "Starting up". It also seemed to make Orbot in the background go berserk, constantly crashing and bringing itself back up again.</p>
+										<p>As for publishing, jSite, which I use to publish freesites on the desktop, is a no-go unless one wants to spend several hours setting up a Java runtime environment and an X server and a desktop environment in either Termux or AnLinux. While I could probably do this on my current phone with little issue using desktop mode and my wireless mouse and keyboard, for most of the Moto X's useful lifetime (the battery has been shot and nonfunctional for a few years now) I did not have even so much as a Bluetooth keyboard and was stuck to tapping on the screen.</p>
+										<p>The Freenet devs, however, have provided a simpler method of freesite publishing for those unable to access an X server. Run the following in Termux:</p>
+										<pre>
+termux-setup-storage
+pkg install git python3
+git clone https://github.com/freenet/pyFreenet
+cd pyFreenet
+										</pre>
+										<p>To upload a single file. run the following command: <code>python ./fcpupload ~/storage/shared/path/to/file</code></p>
+										<p>(You can also just use the FProxy interface from a browser.)</p>
+										<p>To make an updatable freesite:</p>
+										<pre>
+python ~/pyFreenet/freesitemgr add
+python ~/pyFreenet/freesitemgr listall
+python ~/pyFreenet/freesitemgr update NAME_OF_FREESITE
+										</pre>
+										<p>Please note that it may take a great while depending on the CPU speed of your phone, your internet speeds, and the size of the freesite.</p>
+									</div>
+									<hr>
+										<div class="box">
+											<h2>ZeroNet</h2>
+											<p>There have been several ZeroNet apps for Android. The most feature-packed is <a href="https://github.com/ZeroNetX/zeronet_mobile/releases">ZeroNetX Mobile</a>, which does not seem to be on F-Droid. Please keep in mind, however, that the latest public build as of writing is from December 2021. It hung on first start on my Moto X, but worked on the Note 3.</p>
+											<p>After the app downloads all assets, the UI <em>should</em> start in settings. Make sure to enable "Public DataFolder" and "Disable Battery Optimization".</p>
+											<p>After initialization and first start, go to ZeroHello and then open the left side menu. Wait for all zites to finish updating, then click the meatball menu by "Scribe" and then "Clone". If you're not good at HTML and want an in-browser editor and built-in comment support, you're done and can get to writing. If you want to drop your own HTML files into the zite, open your file manager and go to <code>Android/Data/in.canews.zeronetmobile/files/ZITEHASHHERE</code> and edit/add/delete to your delight. (Just leave <code>content.json</code> alone, as that contains some of your private keys.) Go back to your zite in whatever browser you're using and hit the "Sign &amp; Publish new content" button. It may fail since the zite is new and has no seeders, but that can be fixed by sharing the zite URL with some others who may be interested in your content.</p>
+										</div>
+										<hr>
+											<div class="box">
+												<h2>IPFS</h2>
+												<p>The <a href="https://f-droid.org/en/packages/threads.server/">official IPFS client</a> requires Android 9.0 or newer, so it can't run on my Moto X. <a href="https://f-droid.org/en/packages/com.termux/">Termux</a> to compile the CLI binary won't run on the Moto X either since it requires Android 7.0 or newer. I did not attempt to compile it in UserLAnd, and back in 2014 I wouldn't have known how to compile anything anyway. The IPFS app in my experience does not run well on any device and has issues with retrieving data, even from peers on the same network as it. (Plus the QR code scanner makes an annoying beep.)</p>
+												<p>To compile IPFS in Termux, run the following:</p>
+												<pre>
+pkg install golang build-essential file git
+git clone https://github.com/ipfs/go-ipfs/
+cd go-ipfs
+make build
+./ipfs init --profile=lowpower
+												</pre>
+												<p>From there, all IPFS commands work as usual, but you must find a way to run the daemon in the background.</p>
+											</div>
+											<hr>
+												<div class="box">
+													<h2>Hypercore</h2>
+													<p><a href="https://gitlab.com/gateway-browser/gateway/#building-from-source">Gateway Browser</a>, which attempted to be "Beaker Browser but for Android", was last updated a year ago, and the developer never provided any publically available binaries, testing or not. The repo was so large that I had issues downloading it from my home connection; I had to clone it on my VPS and then move the git tree elsewhere and download the other files through SFTP to reduce it from <em>half a gigabyte</em> to only a few megabytes.</p>
+													<p>The README's instructions to compile it were absolutely awful and vague. When I finally got <code>npm</code> and Node.js working on my machine, I ran <code>node ci</code> to install the dependencies for the app, and at the end I got:</p>
+													<blockquote>76 vulnerabilities (2 low, 34 moderate, 24 high, 16 critical)</blockquote>
+													<p><em>I love unmaintained software!!</em></p>
+													<p>The build failed. What did you expect from Node.js?</p>
+													<p>Hypercore, the protocol Beaker Browser started using once they abandoned Dat, apparently provides <a href="https://hypercore-protocol.org/guides/hyp/">its own CLI</a>... unsurprisingly also written in Node.js like so much other "next internet" garbage. This was slightly easier to install, although I don't see how my early-teenage self would have even known how to look for this.</p>
+													<p><a href="https://f-droid.org/en/packages/tech.ula/">UserLAnd</a> failed every <code>npm</code> command with "Illegal instruction". <a href="https://f-droid.org/en/packages/exa.lnx.a/">AnLinux</a> in a Termux install got as far as running <code>npm install -g @hyperspace/cli</code> before <code>npm</code> crashed at the end with the message "Exit handler never called!"</p>
+													<p align="center"><img src="http://yggdrasil.mayvaneday.org/img/node.png" alt="I HATE NODE.JS!!!" /></p>
+												</div>
+												<hr>
+													<div class="box">
+														<p>Hosting on mobile comes with two obvious challenges:</p>
+														<ol>
+															<li>When using a client-server model, the phone will likely have less "uptime" as far as the network is concerned than an actual server running somewhere. Not everyone has the benefit of a persistent Internet connection, much less one fast enough to handle more than a light load of traffic, or the battery life to safely have one's device connected to a network and pumping data 24/7. While mobile data can help alleviate network availability, not everyone has an "unlimited" data plan, and even "unlimited" ones often have a set amount of data at high speeds usable every month before the user is kicked to a subpar speed for the rest of that billing month, which may not be fast enough for hosting purposes. These mobile servers would be even more vulnerable to DDoS attacks. Being that phones are used for a hell of a lot more than just hosting and the trend of using chat apps instead of traditional SMS, network congestion and increased battery drain caused by a flood of traffic to one's hidden service could lead to a life-threatening situation.</li>
+															<li>When using a peer-to-peer model, not all mobile networks are friendly or accomodating towards peer-to-peer traffic. In some networks, whether mobile data or WiFi, said traffic may be filtered or blocked or even illegal in some jurisdictions. With ZeroNet, for instance, a VPN can be used to circumvent any blocks for the purposes of <em>viewing</em> content, but until one gets a substantial amount of peers on their own zite, said zite's availability is restricted by one's ability to get a certain port open on the network, which is often not possible with free VPNs or on mobile networks.</li>
+														</ol>
+														<p>Despite these challenges, the state of hosting one's content on darknets via Android is much more stable and accessible than it was several years ago. But many of these darknets still depend on being able to access the wider Internet to reach the servers responsible for controlling the darknet: Tor is heavily centralized in the sense that the network depends on the existence of a few <a href="https://web.archive.org/web/20220708210031/https://consensus-health.torproject.org/">consensus nodes</a>, and the app used in the ZeroNet section of this post depends on Github to retrieve the Python 3 runtime and other dependencies, and Yggdrasil requires at least one public peer configured in order to talk to devices outside of the local network. As much as I dislike the state of ZeroNet's development, it would probably be the most functional in a situation where Internet access is limited and one only has an Android device and needs to share information, followed by Freenet.</p>
+														<p>As far as creating that information, whether webpages or books or other media? Well, that is a problem for a later post.</p>
+													</div>
+				</article>]]>
+		</summary>
+	</entry>
+
+	<entry>
+		<title>Broke Dumbass Attempts To Web3</title>
+		<link href="http://yggdrasil.mayvaneday.org/blog/2022/july/web3.html" />
+		<id>http://yggdrasil.mayvaneday.org/blog/2022/july/web3.html</id>
+		<published>2022-07-07</published>
+		<summary type="html"><![CDATA[<article>
+				<div class="box">
+					<p>I have successfully managed to <a href="https://deadendshrine.online/few/">microwave my brain</a>. Spending forty-plus hours squeezed into a single month on a project you wanted to make for several years and then getting into it and finding out it's just tedious data entry all the way down will do that to you. Doing not much of anything else, writing or making art or even going outside, has made me go animalistic and crazy to the tune of an <a href="https://web.archive.org/web/20220706215822/https://readykids.com.au/oral-fixation/">oral fixation</a> of gnawing on chunks of wood stolen from the organics waste bin at the side of the house. Not the greatest idea I've ever had. Hopefully "start working on a new book of poetry" will be a better one once the mental fog starts to lift. I hope this isn't what remote work will feel like once I <em>do</em> get a job.</p>
+					<p>Speaking of excessive technology use driving people batshit insane, I had a dream last night where a bunch of techbros had forced me to stand in front of a tribunal and explain why Let's Decentralize doesn't cover web3 projects. Neither my argument nor theirs made any sense, being a dream and all, but I remember "your shit is obtuse and doesn't make any sense to a layperson" not being taken for an answer. But since at least two people have emailed me asking if I could shill their crypto projects and the only response I've pulled out so far is "I don't do free labor", I decided that I would spend today (yesterday, if you're reading this on the day of publication) actually researching web3 so I can have an actual concrete argument when the tribunal <em>does</em> come.</p>
+				</div>
+				<hr>
+					<div class="box">
+						<h2>Filecoin</h2>
+						<p>Filecoin was the first web3 project that came to mind. I mean, it has the name "file" in it! So one would think that the whole point would be to host files online. And what is a website other than a pile of files?</p>
+						<p>Since I was already familiar with IPFS, which Filecoin is apparently built off of, I thought that setting up a Filecoin node would be as simple as compiling and installing the IPFS node is. Apparently not. The <a href="https://web.archive.org/web/20220706204229/https://filecoin.io/">main website</a> felt janky and broken with a "loading experience" spinner than just spun forever, and the homepage displayed little to no relevant information other than a glorified version of "we store files", which one could already guess from the name. Going to "Build" and then "View Filecoin storage tutorials" gave an <a href="https://archive.ph/lNC80">IPFS resolving error.</a> <!-- https://docs.filecoin.io/build/examples/ -->
+							Digging on an external search engine turned up the <a href="https://web.archive.org/web/20220706174435/https://github.com/filecoin-project/lotus">GitHub for the Lotus daemon</a>, which allows one to interact with the Filecoin blockchain, but the "getting started" documentation at the end of the page <a href="https://archive.ph/hAQls">also 404ed</a> with an IPFS error. Because what you truly want to see when researching if a new technology is trustworthy or not is to see it crashing and burning at every turn.</p>
+						<p>Strangely, a different link to the documentation was on the sidebar. "Surely we're getting <em>somewhere</em>," I wondered. "Not even <a href="https://web.archive.org/web/20220706205526/https://medium.com/coinmonks/how-to-add-site-to-ipfs-and-ipns-f121b4cfc8ee">figuring out IPNS</a> took this long."</p>
+						<p>If the destination was "imagining myself slamming my fists into my keyboard", then sure, we got somewhere.</p>
+						<p>The Lotus daemon has <a href="https://web.archive.org/web/20220706174251/https://lotus.filecoin.io/storage-providers/get-started/hardware-requirements/">absolutely ridiculous hardware requirements</a>: it would cost more to acquire 128 GB of RAM and the energy to power that than I'd ever earn with Filecoin, assuming I was ever in it to earn anything and didn't just want another mirror for my website. <a href="https://web.archive.org/web/20220706174952/https://lotus.filecoin.io/lotus/install/prerequisites/#minimal-requirements">Lite nodes are slightly better</a>, but still way higher than anything I have: my VPS has only 8 GB, and my desktop has 16, and there's no way I'm running a bandwidth-intensive application like this from my home connection or paying more for a beefy VPS from Contabo when it would all just get sucked up by a single application. Besides, it wouldn't even work for long: the chain grows at approximately 38 GB every day. With the storage my current VPS has, I'd be out of disk space in <em>four days</em>!</p>
+						<p>What seems to be common for web3 projects is that, if one doesn't want to run a node or doesn't have the resources to do so, the only way to interact with the network is by <a href="https://web.archive.org/web/20220706174735/https://docs.filecoin.io/build/get-started/">interfacing with a third-party API</a>, which kind of defeats the point of "decentralization" if my only method of access is forever mediated by someone else.</p>
+						<p>So Filecoin is out.</p>
+					</div>
+					<hr>
+						<div class="box">
+							<h2>Siacoin / Skynet</h2>
+							<p>I did not go in with high hopes. My first introduction to Siacoin and its associated projects was <a href="https://web.archive.org/web/20220618073628/https://siasetup.info/concerns-about-sia-and-skynet">a huge callout post</a> warning about how shoddy and, as we zoomers say, "sus" the development team is. I <em>strongly</em> urge anyone considering going into web3 to read through that post, even if not going to Siacoin per se, since many of the arguments about monetization and faux-decentralization will carry over into anything web3-related.</p>
+							<p>Despite this, I was still willing to give Skynet a try. I mean, it bills itself as <a href="https://archive.ph/NaIEU#selection-723.10-723.99">"a collection of cryptographic protocols for storing and retrieving data over the Internet."</a> <!-- https://blog.sia.tech/a-deep-dive-into-skynet-a0fa037feea -->
+								What is a website if not a collection of retrievable files over the Internet? Nothing in that definition explicitly excludes websites, even if web3 seems to be mainly comprised of a bunch of shoddy Node.js webapps.</p>
+							<p>This time, mainly due to the influence of the callout post, I went on a little tour of the community first before getting into the documentation. I wanted to test the waters, to see the typical userbase of Skynet, to judge the competence of those who I would be trusting with my data. After all, <a href="https://web.archive.org/web/20220706210602/https://web3isgoinggreat.com/">web3 has quite the reputation for scams and money laundering and general financial incompetence.</a> Given that I am currently unemployed and dependent on the goodwill of my parents to have a roof over my head and food in my stomach, I don't exactly have the "disposable" income to be burning it for the purposes of playing with "magical Internet money".</p>
+							<p>I should have expected less than nothing.</p>
+							<p align="center"><img src="http://yggdrasil.mayvaneday.org/img/siacoiners.jpg" alt="meme of man on a bus reading a book titled 'why Siacoiners deserve less'" title="meme of man on a bus reading a book titled 'why Siacoiners deserve less'" /></p>
+							<p><a href="https://web.archive.org/web/20220706191825/https://marstorage.hns.siasky.net/">One of the example apps</a> is <em>clearly</em> written by competent developers I can trust with my private files. "Always make soure, you're logged in!" Yeah, I'll make "soure"... to stay away from cloud storage that's effectively a black box concerning where my sensitive data goes.</p>
+							<p>One of the top posts in the subreddit is <a href="https://web.archive.org/web/20220706193750/https://www.reddit.com/r/siacoin/comments/6ygt94/sia_usb_drive_with_unlimited_space/">a "meme" about a USB stick that uses Siacoin for umlimited storage</a>. The "meme" (in quotes because the only humor value is in how half-baked the ideas within are) claims it would require "no installing" and "no need to understand crypto". Only about one or two commenters stopped sucking the OP off for long enough to realize that such a device would require a persistent Internet connection and enough crypto knowledge to get a Sia wallet set up to actually buy whatever storage space ends up getting used and also for drivers to be preinstalled on every operating system in existence in order to require no installation of additional software and to appear just like any other flash drive.</p>
+							<p>The rest of the subreddit is just the standard crypto whining about Binance/Coinbase trading and praising the main devs for the "new Internet" they have supposedly created.</p>
+							<p>So what if I want to actually <em>access</em> and <em>host</em> content on Skynet? You know, the reason we're here?</p>
+							<p>With IPFS, I just have a node on my computer running on localhost port 8082 (yours may differ) that exposes a web UI I can use to view and download content. My website is set up to use DNSLink, so you can just throw the <a href="https://ipfs.letsdecentralize.org/ipns/mayvaneday.org">regular domain into any IPFS portal</a>, whether local or hosted by someone else. For people without domains, they can still use IPNS (which allows for updating content at the same hash), just by distributing the hash itself instead of linking it to a domain name. All of this can be done from a computer I already own that is powerful enough to run an IPFS node, which I've been able to successfully do from a toaster with 2 GB of RAM and a 100 GB hard drive shared among the whole operating system, <em>far</em> lower than <a href="https://web.archive.org/web/20220706201617/https://portal-docs.skynetlabs.com/prerequisites/hosting-provider">the requirements for a Skynet portal</a>.</p>
+							<p>Skynet also has portals, which allow for free viewing of content... but unlike IPFS, where I can just run <code>ipfs add -r /path/to/content</code> and get a hash I can then throw into <code>ipfs name publish MYEXTREMELYLONGHASHHERE</code>, the design of Siacoin mandates that one pays for the storage space one uses. Prices are set by each individual portal, but portals often offer an extremely restricted free tier, which just throws those without money back into the sharecropping paradigm. And if a portal goes down, both free and paid users <a href="https://archive.ph/dR2nU#selection-663.1-663.658">lose control of all their data on said portal</a>. One could run their own portal to avoid shutdowns, but that <a href="https://archive.ph/h4xv4#selection-1439.0-1439.40">costs money beyond</a><!-- https://portal-docs.skynetlabs.com/prerequisites/requirements -->
+								the initial expense of the hardware and bandwidth and electricity to get a server in the first place.</p>
+							<p>Oopsies, looks like you need money to participate after all!</p>
+							<p>And also you apparently <a href="https://web.archive.org/web/20220706201903/https://portal-docs.skynetlabs.com/prerequisites/secrets-management">need a LastPass account</a>. A centralized <em>proprietary</em> service to set up a decentralized Internet? (No, a <a href="https://web.archive.org/web/20220706202300/https://github.com/lastpass/lastpass-cli">CLI client</a> does not count.) Sia is <em>clearly</em> run by clowns.</p>
+						</div>
+						<hr>
+							<div class="box">
+								<h2>Arweave</h2>
+								<p>By this point I was ready for the post to be done. But still I persisted. Surely there must be <em>something</em> out there other than IPFS that won't demand access to my money?</p>
+								<p>Arweave seemed promising at first, but the second tab on their <a href="https://web.archive.org/web/20220706213514/https://www.reddit.com/r/Arweave/top/?t=year">subreddit's header</a> says "Get free tokens now", implying that tokens actually cost money. Under the tab next to it, "Technical", there is supposedly information about hosting content on the Arweave network, but it 404s.</p>
+								<p><a href="https://web.archive.org/web/20210613044935/https://docs.arweave.org/developers/tools/arweave-deploy">After retrieving a saved copy of the deploy page from the Wayback Machine</a>, I installed the NPM package used to deploy files... and failed, since the tool required a keyfile and, for whatever reason, <em>that</em> command wasn't listed first. After generating said keyfile, I tried again... and got an error about insufficient balance. As expected. But hey, at least I tried. And didn't have to buy a supercomputer to do so.</p>
+								<p><code>sudo npm uninstall -g arweave-deploy</code>, and into the trash bin it goes.</p>
+							</div>
+							<hr>
+								<div class="box">
+									<p align="center"><img src="http://yggdrasil.mayvaneday.org/img/NO_THIRD_PARTIES.jpg" alt="deep-fried meme of man screaming surrounded by various web3 company logos" alt="deep-fried meme of man screaming surrounded by various web3 company logos" /></p>
+									<p><strong>If the whole point of web3 is to decentralize everything, then I don't want to use third parties to host my website!</strong> I want to host my own stuff without needing a supercomputer or a persistent connection or static IP address!</p>
+									<p>As far as serverless hosting goes, we already have Freenet and the gazillion ZeroNet forks and whatever Beaker Browser is using nowadays and IPFS, the latter of which works just fine without the gazillion "blockchain domain" scams. In fact, since most of these web3 projects are built off IPFS anyway, why go through a middleman? Because these projects incentivize people to host your shit? If the content is popular enough, there doesn't need to be a profit motive for your content to stay alive and be well-propagated; it'll just happen naturally.</p>
+									<p>How are low-income and other disenfranchised people supposed to participate in web3 without just becoming sharecroppers all over again? With the profit motive, and since storage space is limited, nodes have an incentive to seed anything a wealthy person wants and give the leftover scraps of storage and bandwidth, if any are left, to the "free" users. If microtransactions are required to view anything, then how is a person with little to no "disposable" income supposed to discover new content they may like? (Of course, <a href="http://yggdrasil.mayvaneday.org/blog/2021/december/copywrong.html">a counter-economy of non-commercial content sans paywalls may very well rise up in response.</a>)</p>
+									<blockquote><p>I say: let them. Let them lock down their works so tightly that they become utterly inaccessible. Let them miss out on the money they would have earned from now-disgruntled customers. Let the corporations destroy themselves in building a dam to maximize every dollar flowing to them only to find their river is drying up.</p>
+									</blockquote>
+									<p>I wish that web3 evangelists would realize that the average layperson doesn't give a shit about decentralization in the computing sense. They don't care about making their files as accessible as possible, just to themselves. To them, Google Drive or OneDrive or whatever other cloud storage services are in vogue are plenty good enough for them. They would rather see ads and sharecrop on centralized social media platforms than open their wallets to pay for an inferior service. And of those with the technological expertise to operate one of these nodes if we <em>really</em> wanted to, well... <em>I</em> know that <em>I</em> wouldn't want to live in a world where every interaction with my fellow (physically) human beings is monetized. And I doubt that many others would either. If improving the Internet is the goal, especially on this increasingly fragile planet, replacing the current system with something functionally worse but <a href="https://archive.ph/Xr2Y1">multitudes more energy-intensive</a> <!-- https://www.nytimes.com/interactive/2021/09/03/climate/bitcoin-carbon-footprint-electricity.html -->
+										is not the solution.</p>
+								</div>
+				</article>]]>
+		</summary>
+	</entry>
+
+	<entry>
+		<title>I Love Deleting Things, Actually</title>
+		<link href="http://yggdrasil.mayvaneday.org/blog/2022/june/mistakes.html" />
+		<id>http://yggdrasil.mayvaneday.org/blog/2022/june/mistakes.html</id>
+		<published>2022-06-16</published>
+		<summary type="html"><![CDATA[<article>
+				<p>It's almost midnight, and I've forgotten to take my melatonin and other medication and go to sleep in time to prevent the "sillies" from arriving and giving me the urge to make several ill-informed self-deprecative blog posts. I'm staring at my reflection in my ThinkPad's powered-off screen, lid tilted slightly downward otherwise so that I don't get distracted with my face while writing, obsessively pulling my hair clips out and then sliding them back in to try to keep my fringe in a vaguely straight line. I keep turning the fan on my desk on and off, rapidly oscillating between "I'm too warm to focus" and "the breeze is too much sensory stimulation to focus". My phone sits beside my computer, spamming requests to the <a href="https://huggingface.co/spaces/dalle-mini/dalle-mini">DALL-E mini image generation tool</a> as fast as my fingers can get past the incessant "too much traffic, try again later" errors. My half-wife glances at the screen every now and then from my bed, arms crossed, making sure I don't try to generate another silly prompt of her as, say, a catgirl. Because, as funny as it is to me, for some reason it bothers her immensely, and so I do my best to refrain.</p>
+				<p>"What if I," I wonder aloud, "checked in on a certain trashfire? Purely for something to do while I wait?"</p>
+				<p>I pull my phone closer and put the browser into split-screen mode so that I don't lose my generation progress from Android's trash collector closing my browser and open Tor Browser in the second half of the screen. I swipe to the side to see the logs as I always do. 11%, bootstrapping. 14%, bootstrapping.</p>
+				<p>Tor Browser crashes. And again, when I try to open it again. And again, and again, and again-</p>
+				<p>Jett places a hand on my shoulder. The other browser flashes, fullscreen now that its companion is gone. "<a href="http://yggdrasil.mayvaneday.org/img/hidden/dalle_lysithea.png" title=">tfw Edelgard simp but all her classmates are annoying as hell">Lysithea with a frying pan</a>" is done cooking.</p>
+				<p>"I thought you said you weren't ever going to go back?"</p>
+				<p>I wince. "A cold war with a friend still feels like an open wound-"</p>
+				<p>"-and wounds generally don't heal if you keep picking at them, <em>right?</em>"</p>
+				<p>I eye the jagged rings around the base of her arms, imagine the soft faded curves under her nightshirt, the latter barely there anymore like a distant mostly-forgotten nightmare. "You're right. I'll find something else to distract myself."</p>
+				<p>So I pop "<a href="http://yggdrasil.mayvaneday.org/img/hidden/dalle_bisexual_pitb.png" title="Babe, wake up, new pride flags just dropped">my bisexual half-wife</a>" into DALL-E, ignoring Jett rolling her eyes in pretend aloofness, and open <a href="https://0net-preview.com">ZeroNet Preview</a> in a different browser that doesn't crash so much in the bottom half of my phone screen. Unsurprisingly, neither the Dashboard page nor any of the zites are designed for such a tiny square, even when I attempt to force them to zoom out all the way. A teeny tiny jolt runs through me when I see the thread about my disappearance is back at the top of the list yet again.</p>
+				<p>"I don't know what you expected," Jett whispers. "Well, go on. Face the fire. I know the curiosity will kill you otherwise."</p>
+				<p>And so I trudge on.</p>
+				<p>I do not know if it is a running gag where this friend I will not name is seemingly unable to see my site despite it being accessible to (nearly) everyone else, but since you the reader have found your way here, likely you have seen the takedown notice on the front page of the clearnet version of this site. It clearly states that the other darknet addresses for this site are on <a href="https://letsdecentralize.org">Let's Decentralize</a>. I know for a fact that the ones for the networks other than Tor are on there because I stumble over them every time I update the damn lists.</p>
+				<p>More importantly, someone was angry that I, upon realizing that not all of my deletion attempts for my zites had gone through, pulled out my old <code>users.json</code> and site update script from the "purgatory" folder on my sneakernet drive and forcibly committed one more deletion to finish the job that I <em>thought</em> had happened a month or so ago. That it was a failing of a "censorship-resistant" network that I was able to erase my content so completely off of it by my own will.</p>
+				<p>"So," Jett interrupts, "what are you going to do?"</p>
+				<p>"The same response I have to every other problem in my life," I answer, the sillies taking over. "Do nothing and wait for it to get worse!"</p>
+				<p>She grabs the nearest pillow, wads it up, and screams into its fleshy mass.</p>
+				<p>(insert feminine urge meme here)</p>
+				<p>The favorite button on my keyboard is the delete button, backspace being a close runner-up. It's my domain, after all, my namesake river, <em>forgetfulness</em>. My inheritance as a small child, elementary school version of the <a href="http://yggdrasil.mayvaneday.org/blog/2022/june/purity.html">Purity Spiral</a> deleting as many of the shitty games made in online slideshows as I could in a single night, play-pretending that all the characters within were refugees moving somewhere safer or merely packing up and disappearing to a "time machine" without a trace. Later I would trawl through the preinstalled games on my grandmother's and my father's desktop computers, never touched for fear of embedded viruses despite being planted there by the manufacturer, and look at how the binary files displayed in Notepad before compulsively deleting as much as I could and watching the uninstallers choke afterwards.</p>
+				<p>With one press of a button, I can wash away a typo, a mistake made, a thing I regret saying. A hard drive is just a memory, after all, just a record. And a record can be changed. A record can be altered. A record can be forgotten.</p>
+				<p>Unless you're using a blockchain, that is, where every block is dependent on the existence and immutability of the blocks that came before. Or some other "censorship-resistant" network where content can only be written to a ledger, never edited or deleted.</p>
+				<p>One would think this an ideal solution for a social media site. If nothing can ever be deleted, nobody can really be censored, right? Nobody can be banned and memoryholed without a trace, here today, gone tomorrow? Nobody can be compelled to delete something offensive to a dominant group in society because deletions simply would not be possible. To remove the content would mean removing the whole network, a task simply not technologically feasible.</p>
+				<p>Back when I was on Twitter forever ago, I used to make fun of people who used third-party services to delete their old tweets after a set period of time. What was the point of following people not my friends if the short little posts I enjoyed enough to retweet would be gone eventually? What would be the point of making something enjoyable if it would inevitably disappear?</p>
+				<p>But now, over six years since Eternal Current Year, I know. I understand now.</p>
+				<p>TikTok social contagions. "Carrd"-style single-page websites meant to serve as a hub for one's other presences on the Internet when "link in bio" isn't enough, filled with long lists of any given minor's triggers and fears and enough personal information for any old predator to track them down or manipulate them. Twitter users telling lesbians to kill themselves for the crime of not being attracted to males, trans-identified or not. Off-color jokes socially acceptable years ago but abhorrent now. Confessions of sexuality or political affiliation safe now but illegal and worthy of incarceration or death under a repressive government in the future.</p>
+				<p>Typos.</p>
+				<p><strong>Human beings change, and their opinions, their circumstances, their beliefs all change as well.</strong> What is safe today may be unsafe tomorrow, and not being able to delete something means forever having a target painted on one's back. What is funny today may be recognized as mean-spirited tomorrow, but without the ability to delete it, the wound remains forever open no matter how many apologies are issued.</p>
+				<p>I removed my zites from ZeroNet instead of just leaving them there when I decided to exit the network because I did not want to leave old data lying around. Since ZeroNet doesn't (currently) have document versions like Freenet does, I can be reasonably sure that my data has been removed from the nodes seeding my zites at the time that didn't have them "paused". Sure, it was all ever meant to be public anyway, and I can't do anything about people saving copies of my posts offline. But if I no longer believed in something and wanted it off public record, I didn't want an abandoned and out-of-date version of my site still declaring it for all perpetuity. (I also didn't want to leave future visitors hanging wondering why the zite seemed to be abandoned.)</p>
+				<p>Sure, if the Internet decides to remember something for all time, no amount of litigation in the world could remove it entirely. But the vast amount of "page not archived" errors I've ever gotten while searching for something in the Wayback Machine shows that "the internet never forgets" isn't necessarily true. Without the technological option of a delete button, embarrassing things like that old Twitter account of mine can't fade silently into the night, never to bother me again. Posts revealing intimate details of my life I no longer feel comfortable sharing would be available for any potential doxxer to exploit. They would stay around as long as the blockchain or website or whatever existed.</p>
+				<p>Maybe I, as an adult in a world where the delete key is still on my keyboard, can face the fire. But I watch the generations younger than me to whom "privacy" as a concept is nonexistent put their <em>entire</em> lives online with no filter or discretion, and I watch web3 and the blockchain-ization of everything demand a world where nothing can ever be taken back or rectified and all must be done in one's legal name, and I wonder if one day all that will be safe to do on the network is post recipes and pictures of flowers.</p>
+				</article>]]>
+		</summary>
+	</entry>
+
+	<entry>
+		<title>None Nuns</title>
+		<link href="http://yggdrasil.mayvaneday.org/poetry/n/none-nuns.txt" />
+		<id>http://yggdrasil.mayvaneday.org/poetry/n/none-nuns.txt</id>
+		<published>2022-06-14</published>
+		<summary type="html"><![CDATA[<article>
+				<pre>
+Shadows in sheep's clothes,
+lead us to the gallows,
+to the place before my garden
+where lies a freshly-dug hole.
+
+For although my soul quite often haunts
+the school where I last belonging sought,
+my childhood memory is blank,
+tabula rasa, greasy smeared blot.
+Something happened I cannot recall,
+cannot excise from tangled Yewiffe,
+inside the church where under bright lamps
+I sweated in so-called sanctuary.
+
+All I comprehend, all that I know
+is that there's a ragged hole
+deep inside my weary soul
+that begs for a sword,
+a spear, a lance, some other blade
+coated in holy fire that shall never fade
+to put me to death in the name of a lord
+I would never in my will bow my head to.
+A voice with a body I swore off in my youth
+deems it romantic, fated, that I subsume
+my will to his and accept my place
+in a pearly and golden-gilded tomb.
+
+Mother,
+will you forgive me after I'm gone?
+Will you take these slivers
+and remnants of songs
+up to the hillside
+where derailed my life
+and let me one more time those trees haunt?
+
+Oh, who am I kidding?
+You never gave a damn about anything I ever wrote
+unless as proof that against *someone* I was sinning
+and needed to be punished for crossing a line
+my brothers could cross as they pleased.
+
+That's all I ever was in your eyes, anyway:
+just a pretty doll to dress up and display
+as proof that you could keep something alive.
+I became old enough to think for myself
+and in favor
+of my brothers
+you pushed me aside
+but demanded I alone keep up the regimens:
+face sliced, breasts bound, jaw forcibly bent.
+
+And if you could, you'd drive nails through my hands
+so never again could I write of the pain,
+silenced, perfect sacrificial lamb
+in the image of a Son
+who deemed all "Other" and "Man".
+
+I could never in a god who hates me so believe.
+I could never impale myself on the altar of femininity,
+so your hands itch to instead order cut down my favorite tree
+to build this gallows. In the wind I could be swinging,
+that child again, joyful, carefree.
+The wind carries the crow forth and my last words echoing:
+
+Do you love me now, Mother,
+now that I'm your martyr?
+That you've forever silenced my voice
+that wanted to ring so loud?
+Do you love me now?
+				</pre>
+				</article>]]>
+		</summary>
+	</entry>
+
+	<entry>
+		<title>Mitad-marida I</title>
+		<link href="http://yggdrasil.mayvaneday.org/poetry/m/mitad1.txt" />
+		<id>http://yggdrasil.mayvaneday.org/poetry/m/mitad1.txt</id>
+		<published>2022-06-11</published>
+		<summary type="html"><![CDATA[<article>
+				<pre>
+Cold summer. A cold heart
+beats in my chest
+as I from my house depart,
+legs stiff, left arm
+aching.
+
+Father spoke, "You are going to kill this tree."
+It slipped
+from his lips
+like a prophecy.
+Dogs outside my bedroom window gnawing
+on the Velouria Bush, Nidhogg,
+portent of the Eschaton.
+Too short, too squat,
+too weakened from the bark not
+there anymore
+to hang myself from branch's ledge
+in hopes of gaining the knowledge
+to see this world through to its bitter end.
+
+I kneel before the now-fenced-in stump
+and reach forward. My limbs falter.
+A bramble or some other thorn from Dead End Shrine
+draws a gash through my skin, nature's penknife.
+Rivulets of blood stream
+down without recognition of pain,
+carmine trickles, a river, a flood,
+guided by the soft-falling rain
+before the altar.
+
+And I pray,
+
+let us reconcile before closes this day.
+Dead-End King,
+lead me to victimless iniquity.
+Lead me to damnation
+without hurting a single being
+undeserving.
+				</pre>
+				</article>]]>
+		</summary>
+	</entry>
+
+</feed>
