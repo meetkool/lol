@@ -1,4 +1,4 @@
 ssh -M -S my-ctrl-sys -fNT -L 8022:localhost:22 root@172.105.36.51 
 ssh -M -S my-ctrl-1-ssh -fNT -L 8023:172.16.0.3:22 root@172.105.36.51
 ssh -M -S my-ctrl-main -fNT -L 8080:172.16.0.3:80 root@172.105.36.51
-ssh -M -S my-ctrl-file -fNT -L 8022:172.16.0.3:81 root@172.105.36.51
+ssh -M -S my-ctrl-file -fNT -L 8081:172.16.0.3:81 root@172.105.36.51
